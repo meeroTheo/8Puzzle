@@ -1,2 +1,7 @@
 # 8Puzzle
-AI A* Search Puzzle
+
+CP468 Assignment 1
+
+## Instructions
+
+
