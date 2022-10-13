@@ -1,8 +1,10 @@
 class Puzzle:
 
-    def __init__(self, board, size):
+    def __init__(self, board, size, h, g):
         self.board = board
         self.size = size
+        self.h = 0
+        self.g = 0
 
     def puzzleEndState(puzzle_size):
         """

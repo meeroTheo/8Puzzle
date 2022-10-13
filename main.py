@@ -32,3 +32,11 @@ def isSolvable(puzzle):
     """
     disorder = disorder(puzzle)
     return (disorder % 2 == 0)
+
+
+def totalCost(puzzle):
+    """
+    return estimated total cost 
+    of cheapest solution
+    """
+    return puzzle.h+puzzle.g
