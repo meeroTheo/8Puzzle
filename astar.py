@@ -1,4 +1,5 @@
 from puzzle import Puzzle
+from math import sqrt
 
 
 class Astar:
@@ -15,10 +16,10 @@ class Astar:
         return estimated total cost 
         of cheapest solution for h1
         """
-        return self.h1 + self.g
+        return self.heuristic1 + self.g
 
     def f2(self):
-        return self.h2 + self.g
+        return self.heuristic2 + self.g
 
     def f3(self):
         return self.h3 + self.g
@@ -44,7 +45,26 @@ class Astar:
         distance = 0
         board = self.puzzle.board
         size = self.puzzle.size
-        goalstate = self.puzzle.puzzleEndState(self.puzzle.size)
         for i in range(size):
             for j in range(size):
                 if board[i][j] != 0:
+                    x = (self.puzzle.board[i][j]-1)//size  #
+                    y = (self.puzzle.board[i][j]-1) % size  #
+                    distance += abs(x-i)+abs(y-j)  # 0
+        return distance
+
+    def heuristic3(self):
+
+        distance = 0
+        board = self.puzzle.board
+        size = self.puzzle.size
+        goalstate = self.puzzle.puzzleEndState(self.puzzle.size)
+
+        for i in range(size):
+            for j in range(size):
+                if board[i][j] != 0:
+                    x = (self.puzzle.board[i][j]-1)//size  #
+                    y = (self.puzzle.board[i][j]-1) % size  #
+                    distance += sqrt((x-i)**2 + (y-j)**2)
+
+        return distance

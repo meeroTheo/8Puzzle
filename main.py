@@ -18,12 +18,4 @@ def main():
     Puzzle.printPuzzle(puzzle1)
 
 
-def totalCost(puzzle):
-    """
-    return estimated total cost 
-    of cheapest solution
-    """
-    return puzzle.h + puzzle.g
-
-
 main()
