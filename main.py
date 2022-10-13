@@ -1,3 +1,6 @@
+from puzzle import Puzzle
+
+
 def main():
     """
     Main function
@@ -10,26 +13,9 @@ def main():
         puzzleSize = int(
             input("Enter puzzle size (8-puzzle, 15 puzzle, 24 puzzle): "))
 
+    puzzle1 = Puzzle(puzzleSize)
 
-def disorder(puzzle):
-    """
-    Determines the disorder parameter
-    """
-    size = len(puzzle)-1
-    disorder_num = 0
-
-    for i in range(size):
-        for j in range(1+i, size):
-            if (puzzle[j][i] > 0) and puzzle[j][i] > puzzle[i][j]:
-                disorder += 1
-    return disorder
-
-
-def isSolvable(puzzle):
-    """
-    Determines if the puzzle is solvable (DP even)
-    """
-    return (disorder(puzzle) % 2 == 0)
+    Puzzle.printPuzzle(puzzle1)
 
 
 def totalCost(puzzle):
@@ -38,3 +24,6 @@ def totalCost(puzzle):
     of cheapest solution
     """
     return puzzle.h + puzzle.g
+
+
+main()

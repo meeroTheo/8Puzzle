@@ -1,10 +1,27 @@
+import random
+
+
 class Puzzle:
 
-    def __init__(self, board, size, h, g):
-        self.board = board  # matrix
-        self.size = size  # size of puzzle (8,15,24)
+    def __init__(self, size):
+        self.board = None  # matrix
+        self.size = (size+1) ** (1/2)  # n x n size of puzzle 3,4,5(8,15,24)
+
+        evenDP = self.createP()
+        while (not evenDP):
+            self.createP()
+
         self.h = 0  # heuristic
         self.g = 0  # cost to reach goal
+
+    def createP(self):
+        for i in range(self.size-1):
+            for j in range(self.size-1):
+                self.board[i][j] = random.sample(
+                    range(self.size**2), self.size**2)
+
+        evenDP = self.isSolvable(self.board)
+        return evenDP
 
     def puzzleEndState(self, size):
         """
@@ -21,20 +38,20 @@ class Puzzle:
                 11, 12, 13, 14, 15], [16, 17, 18, 19, 20], [21, 22, 23, 24, 0]]
         return puzzleEndState
 
-    def printPuzzle(size, board):
+    def printPuzzle(self):
         """
         prints puzzle matrix with proper format
         """
-        puzzle_len = size
+        puzzle_len = self.size
         if puzzle_len == 8:
-            for row in board:
+            for row in self.board:
                 print("{: >5} {: >5} {: >5}".format(*row))
         elif puzzle_len == 15:
-            for row in board:
+            for row in self.board:
                 print("{: >5} {: >5} {: >5} {: > 5}".format(*row))
 
         else:  # if puzzle size is 24 (5)
-            for row in board:
+            for row in self.board:
                 print("{: >5} {: >5} {: >5} {: >5} {: >5}".format(*row))
 
         return
@@ -53,3 +70,18 @@ class Puzzle:
         puzzle is solved
         """
         return (self.board == self.puzzleEndState(self.size))
+
+    def isSolvable(self):
+        """
+        Determines the disorder parameter
+        Determines if the puzzle is solvable (DP even)
+
+        even = true
+        """
+        disorder_num = 0
+
+        for i in range(self.size):
+            for j in range(1+i, self.size):
+                if (self.board[j][i] > 0) and self.board[j][i] > self.board[i][j]:
+                    disorder += 1
+        return (disorder % 2 == 0)
