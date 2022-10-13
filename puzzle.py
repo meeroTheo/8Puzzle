@@ -4,24 +4,26 @@ import random
 class Puzzle:
 
     def __init__(self, size):
-        self.board = None  # matrix
-        self.size = (size+1) ** (1/2)  # n x n size of puzzle 3,4,5(8,15,24)
+
+        # n x n size of puzzle 3,4,5(8,15,24)
+        self.size = int((size+1) ** (1/2))
+        self.board = [[0 for x in range(self.size)]
+                      for y in range(self.size)]  # matrix
 
         evenDP = self.createP()
         while (not evenDP):
-            self.createP()
-
-        self.h = 0  # heuristic
-        self.g = 0  # cost to reach goal
+            evenDP = self.createP()
 
     def createP(self):
-        for i in range(self.size-1):
-            for j in range(self.size-1):
-                self.board[i][j] = random.sample(
-                    range(self.size**2), self.size**2)
+        list = random.sample(range(self.size**2), self.size**2)
+        print(list)
+        index = 0
+        for i in range(self.size):
+            for j in range(self.size):
+                self.board[i][j] = list[index]
 
-        evenDP = self.isSolvable(self.board)
-        return evenDP
+                index += 1
+        return self.isSolvable()
 
     def puzzleEndState(self, size):
         """
@@ -43,10 +45,10 @@ class Puzzle:
         prints puzzle matrix with proper format
         """
         puzzle_len = self.size
-        if puzzle_len == 8:
+        if puzzle_len == 3:
             for row in self.board:
                 print("{: >5} {: >5} {: >5}".format(*row))
-        elif puzzle_len == 15:
+        elif puzzle_len == 4:
             for row in self.board:
                 print("{: >5} {: >5} {: >5} {: > 5}".format(*row))
 
@@ -78,10 +80,10 @@ class Puzzle:
 
         even = true
         """
-        disorder_num = 0
+        disorder = 0
 
-        for i in range(self.size):
-            for j in range(1+i, self.size):
-                if (self.board[j][i] > 0) and self.board[j][i] > self.board[i][j]:
+        for i in range(self.size-1):
+            for j in range(1+i, self.size-1):
+                if (self.board[j][i] > 0) and (self.board[j][i] > self.board[i][j]):
                     disorder += 1
         return (disorder % 2 == 0)
