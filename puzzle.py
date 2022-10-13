@@ -5,6 +5,10 @@ class Puzzle:
         self.size = size
 
     def puzzleEndState(puzzle_size):
+        """
+        Predetermined goal state for puzzles
+
+        """
         if puzzle_size == 8:
             puzzleEndState = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
         elif puzzle_size == 15:
