@@ -1,4 +1,3 @@
-
 def main():
     """
     Main function
@@ -30,8 +29,7 @@ def isSolvable(puzzle):
     """
     Determines if the puzzle is solvable (DP even)
     """
-    disorder = disorder(puzzle)
-    return (disorder % 2 == 0)
+    return (disorder(puzzle) % 2 == 0)
 
 
 def totalCost(puzzle):
@@ -39,4 +37,4 @@ def totalCost(puzzle):
     return estimated total cost 
     of cheapest solution
     """
-    return puzzle.h+puzzle.g
+    return puzzle.h + puzzle.g
