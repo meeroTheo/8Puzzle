@@ -108,47 +108,50 @@ class Astar:
         """
         Solve the 8 puzzle using A* Search
         """
-        start = Puzzle(self.puzzle.size, 0, 0, 0, 0)
-        startNode = Astar(start)
-
         visit1 = deque()
-        visit2 = deque()
-        visit3 = deque()
+        #visit2 = deque()
+        #visit3 = deque()
 
         # flag to indicate solved puzzle
         flag1 = False
-        flag2 = False
-        flag3 = False
+        #flag2 = False
+        #flag3 = False
 
         # put in while loop
-        while not (flag1 and flag2 and flag3):
-            x, y = self.findzero()
+        count = 0
+        current = self
+        while not (flag1): # and flag2 and flag3
+            count+=1
+            x, y = current.findzero()
             coords = [[x, y-1], [x, y+1], [x-1, y],
                       [x+1, y]]  # up down left right
-
+            print(x, y)
             for i in coords:
                 # get the state of the adjacent node
-                path = self.moves(x, y, i[0], i[1])
-                print(x, y)
-
+                path = current.moves(x, y, i[0], i[1])
                 if path:
                     # create a new node with the state of the adjacent node
+                    
                     pathz = Astar(path)
-                    # calculate heuristic function(comment)
+                    # calculate heuristic function
                     if not (flag1):
                         pathz.f1()
+                        print(pathz.puzzle.f1)
                         visit1.appendleft(pathz)
+                    """
                     if not (flag2):
                         pathz.f2()
                         visit2.appendleft(pathz)
                     if not (flag3):
                         pathz.f3()
                         visit3.appendleft(pathz)
+                    """
             # sort to find the node with the lowest f value which represents the best path
             if not (flag1):
                 visit1 = deque(
                     sorted(list(visit1), key=lambda x: self.puzzle.f1))
                 node1 = visit1.popleft()
+            """
             if not (flag2):
                 visit2 = deque(
                     sorted(list(visit2), key=lambda x: self.puzzle.f2))
@@ -157,16 +160,20 @@ class Astar:
                 visit3 = deque(
                     sorted(list(visit3), key=lambda x: self.puzzle.f3))
                 node3 = visit3.popleft()
-
-            self.puzzle = node1.puzzle
+            """
+            current=node1
             Puzzle.printPuzzle(node1.puzzle)
+            visit1.clear()
 
-            break
+            if(count == 4):
+                break
+
+            
             if node1.heuristic1() == 0:
                 print("node1 found")
                 flag1 = True
                 break
-
+            """
             if node2.heuristic2() == 0:
                 print("node2 found")
                 flag2 = True
@@ -176,5 +183,5 @@ class Astar:
                 print("node 3 found")
                 flag3 = True
                 break
-
+            """
         return node1
