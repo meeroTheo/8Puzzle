@@ -25,14 +25,14 @@ class Puzzle:
                 index += 1
         return self.isSolvable()
 
-    def puzzleEndState(self, size):
+    def puzzleEndState(self):
         """
         Predetermined goal state for puzzles
 
         """
-        if self.size == 8:
+        if self.size == 3:
             puzzleEndState = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
-        elif self.size == 15:
+        elif self.size == 4:
             puzzleEndState = [[1, 2, 3, 4], [5, 6, 7, 8],
                               [9, 10, 11, 12], [13, 14, 15, 0]]
         else:  # 24 puzzle
@@ -71,7 +71,7 @@ class Puzzle:
         and 0 is on last value of matrix,
         puzzle is solved
         """
-        return (self.board == self.puzzleEndState(self.size))
+        return (self.board == self.puzzleEndState())
 
     def isSolvable(self):
         """

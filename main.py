@@ -1,4 +1,5 @@
 from puzzle import Puzzle
+from astar import Astar
 
 
 def main():
@@ -16,6 +17,11 @@ def main():
     puzzle1 = Puzzle(puzzleSize)
 
     Puzzle.printPuzzle(puzzle1)
+
+    a = Astar(puzzle1)
+
+    print(a.heuristic3())
+    print(a.heuristic4())
 
 
 main()
