@@ -14,7 +14,7 @@ def main():
         puzzleSize = int(
             input("Enter puzzle size (8-puzzle, 15 puzzle, 24 puzzle): "))
 
-    puzzle1 = Puzzle(puzzleSize, 0)
+    puzzle1 = Puzzle(puzzleSize, 0,0,0,0)
 
     Puzzle.printPuzzle(puzzle1)
 

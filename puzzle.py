@@ -1,10 +1,9 @@
-from binascii import b2a_hqx
 import random
 
 
 class Puzzle:
 
-    def __init__(self, size, g):
+    def __init__(self, size, g, f1, f2, f3):
 
         # n x n size of puzzle 3,4,5(8,15,24)
         self.size = int((size+1) ** (1/2))
@@ -12,7 +11,9 @@ class Puzzle:
                       for y in range(self.size)]  # matrix
 
         self.g = g
-
+        self.f1 = f1
+        self.f2 = f2
+        self.f3 = f3
         evenDP = self.createP()
         while (not evenDP):
             evenDP = self.createP()

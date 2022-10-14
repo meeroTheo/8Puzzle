@@ -1,5 +1,7 @@
+
 from puzzle import Puzzle
 from math import sqrt
+from collections import deque
 
 
 class Astar:
@@ -12,13 +14,16 @@ class Astar:
         return estimated total cost 
         of cheapest solution for h1
         """
-        return self.heuristic1 + self.puzzle.g
+        self.puzzle.f1 = self.heuristic1 + self.puzzle.g
+        return
 
     def f2(self):
-        return self.heuristic2 + self.puzzle.g
+        self.puzzle.f2 = self.heuristic2 + self.puzzle.g
+        return
 
     def f3(self):
-        return self.heuristic3 + self.puzzle.g
+        self.puzzle.f3 = self.heuristic3 + self.puzzle.g
+        return
 
     def heuristic1(self):
         """
@@ -91,8 +96,8 @@ class Astar:
 
         initialState = self.puzzle.board
         goalState = self.puzzle.puzzleEndState()
-        start = Puzzle(initialState, self.puzzle.size, 0)
-        goal = Puzzle(goalState, self.puzzle.size, 0)
+        start = Puzzle(initialState, self.puzzle.size, 0, 0, 0, 0)
+        goal = Puzzle(goalState, self.puzzle.size, 0, 0, 0, 0)
 
         startNode = Astar(start)
         endNode = Astar(goal)
@@ -101,12 +106,25 @@ class Astar:
         x, y = self.findzero()
         coords = [[x, y-1], [x, y+1], [x-1, y], [x+1, y]]
 
-        visit = {}
+        visit1 = deque(startNode)
+        visit2 = deque(startNode)
+        visit3 = deque(startNode)
 
         for i in coords:
 
-            paths = self.moves(x, y, i[0], i[1])
-            if paths:
-                # calculate heuristics
+            path = self.moves(x, y, i[0], i[1])
+            if path:
+                pathz = Astar(path)
+                # calculate heuristic function(comment)
+                pathz.f1()
+                pathz.f2()
+                pathz.f3()
+                visit1.add(pathz)
+                visit2.add(pathz)
+                visit3.add(pathz)
+
+        visit1 = deque(sorted(list(visit1), key=lambda puzzle: puzzle.f1))
+        visit2 = deque(sorted(list(visit2), key=lambda puzzle: puzzle.f2))
+        visit3 = deque(sorted(list(visit3), key=lambda puzzle: puzzle.f3))
 
         return
