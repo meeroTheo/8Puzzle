@@ -20,7 +20,7 @@ class Puzzle:
 
     def createP(self):
         list = random.sample(range(self.size**2), self.size**2)
-        print(list)
+
         index = 0
         for i in range(self.size):
             for j in range(self.size):

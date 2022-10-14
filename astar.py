@@ -11,18 +11,18 @@ class Astar:
 
     def f1(self):
         """
-        return estimated total cost 
+        return estimated total cost
         of cheapest solution for h1
         """
-        self.puzzle.f1 = self.heuristic1 + self.puzzle.g
+        self.puzzle.f1 = self.heuristic1() + self.puzzle.g
         return
 
     def f2(self):
-        self.puzzle.f2 = self.heuristic2 + self.puzzle.g
+        self.puzzle.f2 = self.heuristic2() + self.puzzle.g
         return
 
     def f3(self):
-        self.puzzle.f3 = self.heuristic3 + self.puzzle.g
+        self.puzzle.f3 = self.heuristic3() + self.puzzle.g
         return
 
     def heuristic1(self):
@@ -75,7 +75,7 @@ class Astar:
 
     def moves(self, x1, y1, x2, y2):
         """
-        Gets the state of an adjacent node 
+        Gets the state of an adjacent node
         which we swap with the 0
         Returns the new state
         """
@@ -85,7 +85,7 @@ class Astar:
             return None
 
         # swap the 0 with the adjacent node
-        tempState = self.deepcopy(self.puzzle)
+        tempState = self.deepcopy()
         tempVal = tempState.board[x2][y2]
         tempState.board[x2][y2] = tempState.board[x1][y1]
 
@@ -93,39 +93,88 @@ class Astar:
         tempState.g += 1
         return tempState
 
+    def deepcopy(self):
+
+        temp = Puzzle(((self.puzzle.size) ** 2)-1, self.puzzle.g,
+                      self.puzzle.f1, self.puzzle.f2, self.puzzle.f3)
+
+        for i in range(self.puzzle.size):
+            for j in range(self.puzzle.size):
+                temp.board[i][j] = self.puzzle.board[i][j]
+
+        return temp
+
     def solve(self):
         """
         Solve the 8 puzzle using A* Search
         """
-        initialState = self.puzzle.board
-        goalState = self.puzzle.puzzleEndState()
-        start = Puzzle(initialState, self.puzzle.size, 0, 0, 0, 0)
+        start = Puzzle(self.puzzle.size, 0, 0, 0, 0)
         startNode = Astar(start)
 
-        visit1 = deque(startNode)
-        visit2 = deque(startNode)
-        visit3 = deque(startNode)
+        visit1 = deque()
+        visit2 = deque()
+        visit3 = deque()
 
-        x, y = self.findzero()
-        coords = [[x, y-1], [x, y+1], [x-1, y], [x+1, y]]  # up down left right
+        # flag to indicate solved puzzle
+        flag1 = False
+        flag2 = False
+        flag3 = False
+
         # put in while loop
-        for i in coords:
-            # get the state of the adjacent node
-            path = self.moves(x, y, i[0], i[1])
+        while not (flag1 and flag2 and flag3):
+            x, y = self.findzero()
+            coords = [[x, y-1], [x, y+1], [x-1, y],
+                      [x+1, y]]  # up down left right
 
-            if path:
-                # create a new node with the state of the adjacent node
-                pathz = Astar(path)
-                # calculate heuristic function(comment)
-                pathz.f1()
-                pathz.f2()
-                pathz.f3()
-                visit1.add(pathz)
-                visit2.add(pathz)
-                visit3.add(pathz)
-        # sort to find the node with the lowest f value which represents the best path
-        visit1 = deque(sorted(list(visit1), key=lambda puzzle: puzzle.f1))
-        visit2 = deque(sorted(list(visit2), key=lambda puzzle: puzzle.f2))
-        visit3 = deque(sorted(list(visit3), key=lambda puzzle: puzzle.f3))
+            for i in coords:
+                # get the state of the adjacent node
+                path = self.moves(x, y, i[0], i[1])
+                print(x, y)
 
-        return
+                if path:
+                    # create a new node with the state of the adjacent node
+                    pathz = Astar(path)
+                    # calculate heuristic function(comment)
+                    if not (flag1):
+                        pathz.f1()
+                        visit1.appendleft(pathz)
+                    if not (flag2):
+                        pathz.f2()
+                        visit2.appendleft(pathz)
+                    if not (flag3):
+                        pathz.f3()
+                        visit3.appendleft(pathz)
+            # sort to find the node with the lowest f value which represents the best path
+            if not (flag1):
+                visit1 = deque(
+                    sorted(list(visit1), key=lambda x: self.puzzle.f1))
+                node1 = visit1.popleft()
+            if not (flag2):
+                visit2 = deque(
+                    sorted(list(visit2), key=lambda x: self.puzzle.f2))
+                node2 = visit2.popleft()
+            if not (flag3):
+                visit3 = deque(
+                    sorted(list(visit3), key=lambda x: self.puzzle.f3))
+                node3 = visit3.popleft()
+
+            self.puzzle = node1.puzzle
+            Puzzle.printPuzzle(node1.puzzle)
+
+            break
+            if node1.heuristic1() == 0:
+                print("node1 found")
+                flag1 = True
+                break
+
+            if node2.heuristic2() == 0:
+                print("node2 found")
+                flag2 = True
+                break
+
+            if node3.heuristic3() == 0:
+                print("node 3 found")
+                flag3 = True
+                break
+
+        return node1
