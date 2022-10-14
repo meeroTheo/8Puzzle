@@ -61,3 +61,12 @@ class Astar:
                     distance += sqrt((x-i)**2 + (y-j)**2)
 
         return distance
+
+    def findzero(self):
+        for i in range(self.puzzle.size):
+            for j in range(self.puzzle.size):
+                if (self.puzzle.board[i][j] == 0):
+                    return i, j
+
+    def solve(self):
+        x, y = self.findzero()
