@@ -14,14 +14,18 @@ def main():
         puzzleSize = int(
             input("Enter puzzle size (8-puzzle, 15 puzzle, 24 puzzle): "))
 
-    puzzle1 = Puzzle(puzzleSize, 0, 0, 0, 0)
+    puzzle1 = Puzzle(puzzleSize)
+    puzzle2 = Puzzle(puzzleSize)
 
-    Puzzle.print(puzzle1)
+    Puzzle.setBoard(puzzle2, [[1, 2, 3], [0, 4, 6], [7, 5, 8]])
 
-    a = Astar(puzzle1)
+    Puzzle.printPuzzle(puzzle1)
+
+    a = Astar(puzzle1, 0)
+    print(a.f1)
 
     node = a.solve()
     print("Output:")
-    node.print()
+
 
 main()
