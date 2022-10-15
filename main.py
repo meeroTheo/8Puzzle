@@ -16,13 +16,12 @@ def main():
 
     puzzle1 = Puzzle(puzzleSize, 0, 0, 0, 0)
 
-    Puzzle.printPuzzle(puzzle1)
+    Puzzle.print(puzzle1)
 
     a = Astar(puzzle1)
 
     node = a.solve()
     print("Output:")
-    Puzzle.printPuzzle(node.puzzle)
-
+    node.print()
 
 main()

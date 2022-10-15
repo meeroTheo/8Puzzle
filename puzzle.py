@@ -43,8 +43,8 @@ class Puzzle:
             puzzleEndState = [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [
                 11, 12, 13, 14, 15], [16, 17, 18, 19, 20], [21, 22, 23, 24, 0]]
         return puzzleEndState
-
-    def printPuzzle(self):
+        
+    def print(self):
         """
         prints puzzle matrix with proper format
         """

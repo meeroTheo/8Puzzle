@@ -9,43 +9,43 @@ class Astar:
     def __init__(self, puzzle):
         self.puzzle = puzzle
 
-    def f1(self):
+    def f1(puzzle):
         """
         return estimated total cost
         of cheapest solution for h1
         """
-        self.puzzle.f1 = self.heuristic1() + self.puzzle.g
+        puzzle.f1 = Astar.heuristic1(puzzle) + puzzle.g
         return
 
-    def f2(self):
-        self.puzzle.f2 = self.heuristic2() + self.puzzle.g
+    def f2(puzzle):
+        puzzle.f2 = Astar.heuristic2(puzzle) + puzzle.g
         return
 
-    def f3(self):
-        self.puzzle.f3 = self.heuristic3() + self.puzzle.g
+    def f3(puzzle):
+        puzzle.f3 = Astar.heuristic3(puzzle) + puzzle.g
         return
 
-    def heuristic1(self):
+    def heuristic1(puzzle):
         """
         misplaced tiles
         """
         count = 0
-        board = self.puzzle.board
-        goalstate = self.puzzle.puzzleEndState()
-        for i in range(self.puzzle.size):
-            for j in range(self.puzzle.size):
+        board = puzzle.board
+        goalstate = puzzle.puzzleEndState()
+        for i in range(puzzle.size):
+            for j in range(puzzle.size):
                 if ((board[i][j] != goalstate[i][j]) and board[i][j] != 0):
                     count += 1
 
         return count
 
-    def heuristic2(self):
+    def heuristic2(puzzle):
         """
         manhattan distance
         """
         distance = 0
-        board = self.puzzle.board
-        size = self.puzzle.size
+        board = puzzle.board
+        size = puzzle.size
         for i in range(size):
             for j in range(size):
                 if board[i][j] != 0:
@@ -54,10 +54,10 @@ class Astar:
                     distance += abs(x-i)+abs(y-j)  # 0
         return distance
 
-    def heuristic3(self):
+    def heuristic3(puzzle):
         distance = 0
-        board = self.puzzle.board
-        size = self.puzzle.size
+        board = puzzle.board
+        size = puzzle.size
         for i in range(size):
             for j in range(size):
                 if board[i][j] != 0:
@@ -65,27 +65,25 @@ class Astar:
                     y = (board[i][j]-1) % size  #
                     distance += sqrt((x-i)**2 + (y-j)**2)
 
-        return distance
-
-    def findzero(self):
-        for i in range(self.puzzle.size):
-            for j in range(self.puzzle.size):
-                if (self.puzzle.board[i][j] == 0):
+    def findzero(puzzle):
+        for i in range(puzzle.size):
+            for j in range(puzzle.size):
+                if (puzzle.board[i][j] == 0):
                     return i, j
 
-    def moves(self, x1, y1, x2, y2):
+    def moves(puzzle, x1, y1, x2, y2):
         """
         Gets the state of an adjacent node
         which we swap with the 0
         Returns the new state
         """
         # check if the move is valid
-        if (not ((x2 < self.puzzle.size and x2 >= 0)
-                 and (y2 < self.puzzle.size and y2 >= 0))):
+        if (not ((x2 < puzzle.size and x2 >= 0)
+                 and (y2 < puzzle.size and y2 >= 0))):
             return None
 
         # swap the 0 with the adjacent node
-        tempState = self.deepcopy()
+        tempState = Astar.deepcopy(puzzle)
         tempVal = tempState.board[x2][y2]
         tempState.board[x2][y2] = tempState.board[x1][y1]
 
@@ -93,14 +91,14 @@ class Astar:
         tempState.g += 1
         return tempState
 
-    def deepcopy(self):
+    def deepcopy(puzzle):
 
-        temp = Puzzle(((self.puzzle.size) ** 2)-1, self.puzzle.g,
-                      self.puzzle.f1, self.puzzle.f2, self.puzzle.f3)
+        temp = Puzzle(((puzzle.size) ** 2)-1, puzzle.g,
+                      puzzle.f1, puzzle.f2, puzzle.f3)
 
-        for i in range(self.puzzle.size):
-            for j in range(self.puzzle.size):
-                temp.board[i][j] = self.puzzle.board[i][j]
+        for i in range(puzzle.size):
+            for j in range(puzzle.size):
+                temp.board[i][j] = puzzle.board[i][j]
 
         return temp
 
@@ -108,80 +106,43 @@ class Astar:
         """
         Solve the 8 puzzle using A* Search
         """
-        visit1 = deque()
-        #visit2 = deque()
-        #visit3 = deque()
-
-        # flag to indicate solved puzzle
-        flag1 = False
-        #flag2 = False
-        #flag3 = False
+        see = deque()
+        seen = set()
+        seen.add(self.puzzle)
 
         # put in while loop
         count = 0
-        current = self
-        while not (flag1): # and flag2 and flag3
+        current = self.puzzle
+        while True:
             count+=1
-            x, y = current.findzero()
+            x, y = Astar.findzero(current)
             coords = [[x, y-1], [x, y+1], [x-1, y],
                       [x+1, y]]  # up down left right
             print(x, y)
             for i in coords:
                 # get the state of the adjacent node
-                path = current.moves(x, y, i[0], i[1])
+                path = Astar.moves(current,x, y, i[0], i[1])
                 if path:
                     # create a new node with the state of the adjacent node
                     
-                    pathz = Astar(path)
                     # calculate heuristic function
-                    if not (flag1):
-                        pathz.f1()
-                        print(pathz.puzzle.f1)
-                        visit1.appendleft(pathz)
-                    """
-                    if not (flag2):
-                        pathz.f2()
-                        visit2.appendleft(pathz)
-                    if not (flag3):
-                        pathz.f3()
-                        visit3.appendleft(pathz)
-                    """
+                    Astar.f1(path)
+                    if (path not in seen):
+                        see.appendleft(path)
+
             # sort to find the node with the lowest f value which represents the best path
-            if not (flag1):
-                visit1 = deque(
-                    sorted(list(visit1), key=lambda x: self.puzzle.f1))
-                node1 = visit1.popleft()
-            """
-            if not (flag2):
-                visit2 = deque(
-                    sorted(list(visit2), key=lambda x: self.puzzle.f2))
-                node2 = visit2.popleft()
-            if not (flag3):
-                visit3 = deque(
-                    sorted(list(visit3), key=lambda x: self.puzzle.f3))
-                node3 = visit3.popleft()
-            """
+            print(see)
+            see = deque(
+                    sorted(list(see), key=lambda path: path.f1))
+            node1 = see.popleft()
+
+            seen.add(node1)
             current=node1
-            Puzzle.printPuzzle(node1.puzzle)
-            visit1.clear()
-
-            if(count == 4):
+            node1.print() #testing
+            see.clear()
+            print("-------------------------------")
+            if(count == 5):
                 break
 
-            
-            if node1.heuristic1() == 0:
-                print("node1 found")
-                flag1 = True
-                break
-            """
-            if node2.heuristic2() == 0:
-                print("node2 found")
-                flag2 = True
-                break
-
-            if node3.heuristic3() == 0:
-                print("node 3 found")
-                flag3 = True
-                break
-            """
+        
         return node1
