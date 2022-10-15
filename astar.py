@@ -50,7 +50,7 @@ class Astar:
         Puzzle.setBoard(goalstate, Puzzle.puzzleEndState(goalstate))
         parent = self
         seen.append(parent.puzzle)
-        pqueue.append((parent.f1, parent))
+        pqueue.append((parent.f2, parent))
         while True:
             # evaluates node in priority queue with smallest f case
             node = pqueue.pop()[1]
@@ -74,12 +74,13 @@ class Astar:
                         j += 1
                     # puts unseen states into priority queue
                     if not isSeen:
-                        seen.append(new_puzzle)
-                        child = Astar(new_puzzle, g)
-                        pqueue.append((child.f1, child))
+                        seen.append(new_puzzle)  # add to seen
+                        child = Astar(new_puzzle, g)  # create child
+                        pqueue.append((child.f2, child))  # add to queue
+                        # sort queue
                         pqueue.sort(key=lambda x: x[0], reverse=True)
             Puzzle.printPuzzle(node.puzzle)
-            print(node.f1)
+            print(node.f2)
             if (node.puzzle.h1 == 0):
                 break
 

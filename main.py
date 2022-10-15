@@ -22,7 +22,7 @@ def main():
     Puzzle.printPuzzle(puzzle1)
 
     a = Astar(puzzle1, 0)
-    print(a.f1)
+    print(a.f2)
 
     node = a.solve()
     print("Output:")
