@@ -62,7 +62,7 @@ class Astar:
             for i in coords:
                 new_puzzle = Puzzle.moves(node.puzzle, x, y, i[0], i[1])
                 if new_puzzle:
-                    new_puzzle.set_h3()
+                    new_puzzle.set_h1()
                     if new_puzzle.h3 == 0:
                         child = Astar(new_puzzle, g)
                         child.parent = node
@@ -118,7 +118,7 @@ class Astar:
             for i in coords:
                 new_puzzle = Puzzle.moves(node.puzzle, x, y, i[0], i[1])
                 if new_puzzle:
-                    new_puzzle.set_h1()
+                    new_puzzle.set_h2()
                     if new_puzzle.h1 == 0:
                         child = Astar(new_puzzle, g)
                         child.parent = node
