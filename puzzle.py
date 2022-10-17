@@ -68,12 +68,6 @@ class Puzzle:
         str+="---------------"
         return str
 
-    def blank_position(puzzle):
-      # iterate through all and return position of blank
-        for i in range(len(puzzle)):
-            for j in range(len(puzzle)):
-                if puzzle[i][j] == 0:
-                    return i, j
 
     def solved(self):
         """

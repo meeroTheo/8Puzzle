@@ -75,3 +75,4 @@ class Astar:
             print(node.f2)
             if (node.puzzle.h1 == 0):
                 break
+        return node.puzzle

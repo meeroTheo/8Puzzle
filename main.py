@@ -22,6 +22,6 @@ def main():
     a = Astar(puzzle1, 0)
     node = a.solve()
     print("Output:")
-
+    print(node)
 
 main()
