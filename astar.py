@@ -45,6 +45,7 @@ class Astar:
                     return i, j
 
     def solve1(self):
+        start_time=time.time()
         pqueue = []
         seen = set()
         nodecount = 0
@@ -96,7 +97,9 @@ class Astar:
                 #for state in route:
                     #print(state.puzzle)
                 break
-        return steps, nodecount
+            if((time.time()-start_time) > 30):
+                return g,nodecount,True
+        return steps, nodecount, False
 
     def solve2(self):
         pqueue = []
@@ -153,7 +156,6 @@ class Astar:
         return steps, nodecount
 
     def solve3(self):
-        start_time=time.time()
         pqueue = []
         seen = set()
         nodecount= 0
@@ -206,6 +208,4 @@ class Astar:
                 #for state in route:
                     #print(state.puzzle)
                 break
-            if((time.time()-start_time) > 15):
-                return g,nodecount,True
-        return steps, nodecount, False
+        return steps, nodecount
