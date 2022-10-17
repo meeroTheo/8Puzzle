@@ -1,6 +1,5 @@
 
 from queue import PriorityQueue
-import re
 from puzzle import Puzzle
 
 from collections import deque
@@ -14,27 +13,20 @@ class Astar:
         self.g = g
         self.f1 = self.puzzle.h1 + self.g
         self.f2 = self.puzzle.h2 + self.g
-        self.f3 = self.set_f3()
+        self.f3 = self.puzzle.h3 + self.g
         self.children = []
 
-    def set_f1(self):
+    def set_f(self):
         """
         return estimated total cost
         of cheapest solution for h1
         """
         self.f1 = self.puzzle.h1 + self.g
-        return
-
-    def set_f2(self):
         self.f2 = self.puzzle.h2 + self.g
-        return
-
-    def set_f3(self):
         self.f3 = self.puzzle.h3 + self.g
         return
 
-    def isVisited(self):
-        return self.visited
+
 
     def findzero(self, puzzle):
         for i in range(puzzle.size):
@@ -62,7 +54,7 @@ class Astar:
                 if new_puzzle is not None:
                     Puzzle.setBoard(new_puzzle, new_puzzle.board)
                     if Puzzle.isEqual(new_puzzle, goalstate):
-                        Puzzle.printPuzzle(new_puzzle)
+                        print(new_puzzle)
                         return new_puzzle
                     isSeen = False
                     j = 0
@@ -79,42 +71,7 @@ class Astar:
                         pqueue.append((child.f2, child))  # add to queue
                         # sort queue
                         pqueue.sort(key=lambda x: x[0], reverse=True)
-            Puzzle.printPuzzle(node.puzzle)
+            print(node.puzzle)
             print(node.f2)
             if (node.puzzle.h1 == 0):
                 break
-
-    '''
-        g = 0
-        parentnode = Astar(root, g)
-        g += 1
-        for i in coords:
-            new_puzzle = parentnode.puzzle.moves(x,y,i[0],i[1])
-            isVisited = False
-            # checks if new_puzzle's state has been seen before, if seen before the old Astar object will be put into children
-            for node in visited:
-                if node.puzzle == new_puzzle:
-                    isVisited = True
-                    parentnode.children.append(node)
-                    break
-            # if state has never been seen before, create a new Astar object with the new state and put in children
-            if not isVisited:
-                child = Astar(new_puzzle, g)
-                parentnode.children.append(child)
-            #put parent node in visited and mark it as explored
-            visited.append(parentnode)
-            parentnode.explored = True
-
-        if parentnode.children[0] is not None:
-            optimal = parentnode.children.f1
-        allExplored = False
-        for j in parentnode.children:
-            if j.explored == True:
-                allExplored = True
-        for k in parentnode.children:
-            if not allExplored and k.explored == False and k.f1 < optimal:
-                optimal = k.f1
-                
-            elif allExplored and k.f1 < optimal:
-                optimal = k.f1
-        '''

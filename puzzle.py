@@ -33,7 +33,6 @@ class Puzzle:
         return self.isSolvable()
 
     def setBoard(self, board):
-        self.board = board
         self.h1 = self.heuristic1()
         self.h2 = self.heuristic2()
         self.h3 = self.heuristic3()
@@ -54,25 +53,20 @@ class Puzzle:
                 11, 12, 13, 14, 15], [16, 17, 18, 19, 20], [21, 22, 23, 24, 0]]
         return puzzleEndState
 
-    def printPuzzle(self):
-        """
-        prints puzzle matrix with proper format
-        """
+    def __str__(self) -> str:
+        str= ""
         puzzle_len = self.size
         if puzzle_len == 3:
             for row in self.board:
-                print("{: >5} {: >5} {: >5}".format(*row))
-            print("------------------")
+                str += "{: >5} {: >5} {: >5}\n".format(*row)
         elif puzzle_len == 4:
             for row in self.board:
-                print("{: >5} {: >5} {: >5} {: > 5}".format(*row))
-            print("------------------------")
-
+                str += "{: >5} {: >5} {: >5} {: > 5}\n".format(*row)
         else:  # if puzzle size is 24 (5)
             for row in self.board:
-                print("{: >5} {: >5} {: >5} {: >5} {: >5}".format(*row))
-            print("-----------------------------")
-        return
+                str += "{: >5} {: >5} {: >5} {: >5} {: >5}\n".format(*row)
+        str+="---------------"
+        return str
 
     def blank_position(puzzle):
       # iterate through all and return position of blank
