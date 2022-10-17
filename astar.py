@@ -35,11 +35,10 @@ class Astar:
 
     def solve(self):
         pqueue = []
-        g = 0
         seen = set()
-        parent = self
-        pqueue.append((parent.f2, parent))
-        seen.add(str(parent.puzzle))
+        g = 0
+        pqueue.append((self.f2, self))
+        seen.add((self.puzzle))
         count = 0
         while True:
             # evaluates node in priority queue with smallest f case
@@ -56,16 +55,14 @@ class Astar:
                         child.parent = node
                         node = child
                         break
-                    if new_puzzle not in seen:
-                        seen.add(str(new_puzzle))
+                    if ((new_puzzle) not in seen):
+                        seen.add((new_puzzle))
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         pqueue.append((child.f2, child))  # add to queue
-                        # sort queue
-                        pqueue.sort(key=lambda x: x[0], reverse=True)
+            # sort queue
+            pqueue.sort(key=lambda x: x[0], reverse=True)
             # print(node.puzzle)
-            print(node.puzzle.h2)
-            print(node.f2)
             print(node.g)
             count += 1
             # if (count == 100):
