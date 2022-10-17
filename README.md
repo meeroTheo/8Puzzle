@@ -6,6 +6,6 @@ CP468 Assignment 1
 
 
 ### Heuristics
-h1: Number of misplaced tiles
-h2: Sum of Manhattan distances
-h3: 
+h1: Number of misplaced tiles   
+h2: Sum of Manhattan distances  
+h3: Sum of Euclidean distances  
