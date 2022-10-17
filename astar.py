@@ -27,6 +27,10 @@ class Astar:
         self.f3 = self.puzzle.h3 + self.g
         return
 
+    def set_f2(self):
+        self.f2 = self.puzzle.h2 + self.g
+        return
+
     def findzero(self, puzzle):
         for i in range(puzzle.size):
             for j in range(puzzle.size):
@@ -49,7 +53,7 @@ class Astar:
             for i in coords:
                 new_puzzle = Puzzle.moves(node.puzzle, x, y, i[0], i[1])
                 if new_puzzle:
-                    new_puzzle.setBoard()
+                    new_puzzle.set_h2()
                     if new_puzzle.h2 == 0:
                         child = Astar(new_puzzle, g)
                         child.parent = node
@@ -59,6 +63,7 @@ class Astar:
                         seen.add((new_puzzle))
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
+                        child.set_f2
                         pqueue.append((child.f2, child))  # add to queue
             # sort queue
             pqueue.sort(key=lambda x: x[0], reverse=True)
