@@ -42,6 +42,14 @@ class Puzzle:
         self.h2 = self.heuristic2()
         return
 
+    def set_h1(self):
+        self.h1 = self.heuristic1()
+        return
+
+    def set_h3(self):
+        self.h3 = self.heuristic3()
+        return
+
     def puzzleEndState(self):
         """
         Predetermined goal state for puzzles

@@ -1,5 +1,6 @@
 from puzzle import Puzzle
 from astar import Astar
+import time
 
 
 def main():
@@ -14,16 +15,18 @@ def main():
         puzzleSize = int(
             input("Enter puzzle size (8-puzzle, 15 puzzle, 24 puzzle): "))
 
+    start_time=time.time()
     puzzle1 = Puzzle(puzzleSize)
     #puzzle2 = Puzzle(puzzleSize)
 
-    #Puzzle.setBoard(puzzle2, [[1, 2, 3], [0, 4, 6], [7, 5, 8]])
+    #puzzle2.board = [[1, 2, 3], [0, 4, 6], [7, 5, 8]]
+    #puzzle2.setBoard
 
     print(puzzle1)
 
     a = Astar(puzzle1, 0)
     node = a.solve()
     print("Output:")
-
+    print(time.time()-start_time)
 
 main()

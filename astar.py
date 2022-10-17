@@ -30,6 +30,13 @@ class Astar:
     def set_f2(self):
         self.f2 = self.puzzle.h2 + self.g
         return
+    def set_f1(self):
+        self.f1 = self.puzzle.h1 + self.g
+        return
+
+    def set_f3(self):
+        self.f3 = self.puzzle.h3 + self.g
+        return
 
     def findzero(self, puzzle):
         for i in range(puzzle.size):
@@ -41,8 +48,8 @@ class Astar:
         pqueue = []
         seen = set()
         g = 0
-        pqueue.append((self.f2, self))
-        seen.add((self.puzzle))
+        pqueue.append((self.f3, self))
+        seen.add(str(self.puzzle))
         count = 0
         while True:
             # evaluates node in priority queue with smallest f case
@@ -53,26 +60,26 @@ class Astar:
             for i in coords:
                 new_puzzle = Puzzle.moves(node.puzzle, x, y, i[0], i[1])
                 if new_puzzle:
-                    new_puzzle.set_h2()
-                    if new_puzzle.h2 == 0:
+                    new_puzzle.set_h3()
+                    if new_puzzle.h3 == 0:
                         child = Astar(new_puzzle, g)
                         child.parent = node
                         node = child
                         break
-                    if ((new_puzzle) not in seen):
-                        seen.add((new_puzzle))
+                    if (str(new_puzzle) not in seen):
+                        seen.add(str(new_puzzle))
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
-                        child.set_f2
-                        pqueue.append((child.f2, child))  # add to queue
-            # sort queue
-            pqueue.sort(key=lambda x: x[0], reverse=True)
+                        child.set_f3
+                        pqueue.append((child.f3, child))  # add to queue
+                        # sort queue
+                        pqueue.sort(key=lambda x: x[0], reverse=True)
             # print(node.puzzle)
             print(node.g)
             count += 1
             # if (count == 100):
             #    break
-            if (node.puzzle.h2 == 0):
+            if (node.puzzle.h3 == 0):
                 route = []
                 print("\n")
                 print("ROUTE:\n")
