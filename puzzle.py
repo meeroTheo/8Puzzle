@@ -32,7 +32,7 @@ class Puzzle:
         self.h3 = self.heuristic3()
         return self.isSolvable()
 
-    def setBoard(self, board):
+    def setBoard(self):
         self.h1 = self.heuristic1()
         self.h2 = self.heuristic2()
         self.h3 = self.heuristic3()

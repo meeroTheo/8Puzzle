@@ -39,7 +39,7 @@ class Astar:
         seen = set()
         parent = self
         pqueue.append((parent.f2, parent))
-        seen.add(parent.puzzle)
+        seen.add(str(parent.puzzle))
         count = 0
         while True:
             # evaluates node in priority queue with smallest f case
@@ -49,14 +49,15 @@ class Astar:
             coords = [[x, y-1], [x, y+1], [x-1, y], [x+1, y]]
             for i in coords:
                 new_puzzle = Puzzle.moves(node.puzzle, x, y, i[0], i[1])
-                if new_puzzle is not None:
+                if new_puzzle:
+                    new_puzzle.setBoard()
                     if new_puzzle.h2 == 0:
                         child = Astar(new_puzzle, g)
                         child.parent = node
                         node = child
                         break
                     if new_puzzle not in seen:
-                        seen.add(new_puzzle)
+                        seen.add(str(new_puzzle))
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         pqueue.append((child.f2, child))  # add to queue
