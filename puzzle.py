@@ -31,7 +31,10 @@ class Puzzle:
         self.h1 = self.heuristic1()
         self.h2 = self.heuristic2()
         self.h3 = self.heuristic3()
-        return self.isSolvable(self.board,(self.size**2))
+        if (self.size==3):
+            return self.isSolvable(self.board,(self.size**2))
+        else:
+            return Puzzle.isSolvable15(self.board)
 
     def setBoard(self):
         self.h1 = self.heuristic1()
@@ -81,13 +84,41 @@ class Puzzle:
         str+="---------------"
         return str
 
-    def solved(self):
-        """
-        If board is in increasing order,
-        and 0 is on last value of matrix,
-        puzzle is solved
-        """
-        return (self.board == self.puzzleEndState())
+    def isSolvable15(puzzle):
+        # Count inversions in given puzzle
+        dpCount = Puzzle.dpCount15(puzzle)
+    
+        # If grid is odd, return true if inversion
+        # count is even.
+        if (4 & 1):
+            return ~(dpCount & 1)
+    
+        else:    # grid is even
+            pos = Puzzle.findx(puzzle)
+            if (pos & 1):
+                return ~(dpCount & 1)
+            else:
+                return dpCount & 1
+
+    def dpCount15(puz):
+        temp=[]
+        for y in puz:
+            for x in y:
+                temp.append(x)
+        puz=temp
+        dpCount = 0
+        for i in range(4 * 4 - 1):
+            for j in range(i + 1,16):
+                if (puz[j] and puz[i] and puz[i] > puz[j]):
+                    dpCount+=1
+        return dpCount
+
+    def findx(puzzle):
+        # start from bottom-right corner of matrix
+        for i in range(3,-1,-1):
+            for j in range(3,-1,-1):
+                if (puzzle[i][j] == 0):
+                    return 4 - i
 
     def calDP(self,puz, size):
         dp = 0
