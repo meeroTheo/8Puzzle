@@ -45,14 +45,12 @@ class Astar:
                     return i, j
 
     def solve1(self):
-        start_time=time.time()
         pqueue = []
         seen = set()
-        nodecount = 0
+        nodecount= 0
         g = 0
         pqueue.append((self.f1, self))
-        seen.add(str(self.puzzle))
-        count = 0
+        seen.add(hash(str(self.puzzle.board)))
         while True:
             # evaluates node in priority queue with smallest f case
             node = pqueue.pop()[1]
@@ -63,26 +61,23 @@ class Astar:
                 new_puzzle = Puzzle.moves(node.puzzle, x, y, i[0], i[1])
                 if new_puzzle:
                     new_puzzle.set_h1()
-                    if new_puzzle.h3 == 0:
+                    if new_puzzle.h1 == 0:
                         child = Astar(new_puzzle, g)
                         child.parent = node
                         node = child
                         break
-                    if (str(new_puzzle) not in seen):
+                    puz=hash(str(new_puzzle.board))
+                    if (puz not in seen): #fix, NEVER NOT IN SEEN
                         nodecount+=1
-                        seen.add(str(new_puzzle))
+                        seen.add(puz)
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         child.set_f1
                         pqueue.append((child.f1, child))  # add to queue
-                        # sort queue
-                        pqueue.sort(key=lambda x: x[0], reverse=True)
-            # print(node.puzzle)
-            #print(node.g)
-            count += 1
-            # if (count == 100):
-            #    break
-            if (node.puzzle.h3 == 0):
+
+            # sort queue
+            pqueue.sort(key=lambda x: x[0], reverse=True)
+            if (node.puzzle.h1 == 0):
                 route = []
                 #print("\n")
                 #print("ROUTE:\n")
@@ -97,18 +92,15 @@ class Astar:
                 #for state in route:
                     #print(state.puzzle)
                 break
-            if((time.time()-start_time) > 30):
-                return g,nodecount,True
-        return steps, nodecount, False
+        return steps, nodecount
 
     def solve2(self):
         pqueue = []
         seen = set()
-        nodecount = 0
+        nodecount= 0
         g = 0
         pqueue.append((self.f2, self))
-        seen.add(str(self.puzzle))
-        count = 0
+        seen.add(hash(str(self.puzzle.board)))
         while True:
             # evaluates node in priority queue with smallest f case
             node = pqueue.pop()[1]
@@ -119,26 +111,23 @@ class Astar:
                 new_puzzle = Puzzle.moves(node.puzzle, x, y, i[0], i[1])
                 if new_puzzle:
                     new_puzzle.set_h2()
-                    if new_puzzle.h1 == 0:
+                    if new_puzzle.h2 == 0:
                         child = Astar(new_puzzle, g)
                         child.parent = node
                         node = child
                         break
-                    if (str(new_puzzle) not in seen):
+                    puz=hash(str(new_puzzle.board))
+                    if (puz not in seen): #fix, NEVER NOT IN SEEN
                         nodecount+=1
-                        seen.add(str(new_puzzle))
+                        seen.add(puz)
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         child.set_f2
                         pqueue.append((child.f2, child))  # add to queue
-                        # sort queue
-                        pqueue.sort(key=lambda x: x[0], reverse=True)
-            # print(node.puzzle)
-            #print(node.g)
-            count += 1
-            # if (count == 100):
-            #    break
-            if (node.puzzle.h3 == 0):
+
+            # sort queue
+            pqueue.sort(key=lambda x: x[0], reverse=True)
+            if (node.puzzle.h2 == 0):
                 route = []
                 #print("\n")
                 #print("ROUTE:\n")
@@ -188,7 +177,6 @@ class Astar:
 
             # sort queue
             pqueue.sort(key=lambda x: x[0], reverse=True)
-            # print(node.puzzle)
             if (node.puzzle.h3 == 0):
                 route = []
                 #print("\n")

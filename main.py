@@ -22,7 +22,7 @@ def main():
     a = Astar(puzzle, 0)
     print(puzzle)
     steps, nc = a.solve3()
-    result_steps3.append(steps)
+    result_steps3.append(steps-1)
     result_nodecount3.append(nc)
 
     """result_steps2=[]
@@ -36,7 +36,7 @@ def main():
         a = Astar(puzzle, 0)
         steps, nc, timeOut = a.solve1()
         if (not timeOut):
-            result_steps1.append(steps)
+            result_steps1.append(steps-1)
             result_nodecount1.append(nc)
             print("done h1")
         else:
@@ -47,10 +47,10 @@ def main():
         print(puzzle)
         print("---------------------")
         steps, nc= a.solve2()
-        result_steps2.append(steps)
+        result_steps2.append(steps-1)
         result_nodecount2.append(nc)
         steps, nc = a.solve3()
-        result_steps3.append(steps)
+        result_steps3.append(steps-1)
         result_nodecount3.append(nc)
     
     print(result_steps1)
