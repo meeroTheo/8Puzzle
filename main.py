@@ -17,7 +17,15 @@ def main():
 
     result_steps3=[]
     result_nodecount3=[]
-    result_steps2=[]
+
+    puzzle = Puzzle(puzzleSize, True)
+    a = Astar(puzzle, 0)
+    print(puzzle)
+    steps, nc = a.solve3()
+    result_steps3.append(steps)
+    result_nodecount3.append(nc)
+
+    """result_steps2=[]
     result_nodecount2=[]
     result_steps1=[]
     result_nodecount1=[]
@@ -48,7 +56,7 @@ def main():
     print(result_steps1)
     print(result_nodecount1)
     print(result_steps2)
-    print(result_nodecount2)
+    print(result_nodecount2)"""
     print(result_steps3)
     print(result_nodecount3)
 

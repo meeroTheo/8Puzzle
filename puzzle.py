@@ -4,19 +4,20 @@ from math import sqrt
 
 class Puzzle:
 
-    def __init__(self, size):
+    def __init__(self, size,new):
 
         # n x n size of puzzle 3,4,5(8,15,24)
         self.size = int((size+1) ** (1/2))
         self.board = [[0 for x in range(self.size)]
                       for y in range(self.size)]  # matrix
-
-        evenDP = self.createP()
-        while (not evenDP):
-            evenDP = self.createP()
-        self.h1 = self.heuristic1()
-        self.h2 = self.heuristic2()
-        self.h3 = self.heuristic3()
+        self.new=new
+        if (new):
+            solvable = self.createP()
+            while (not solvable):
+                solvable = self.createP()
+            self.h1 = self.heuristic1()
+            self.h2 = self.heuristic2()
+            self.h3 = self.heuristic3()
 
     def createP(self):
         list = random.sample(range(self.size**2), self.size**2)
@@ -25,12 +26,12 @@ class Puzzle:
         for i in range(self.size):
             for j in range(self.size):
                 self.board[i][j] = list[index]
-
                 index += 1
+                
         self.h1 = self.heuristic1()
         self.h2 = self.heuristic2()
         self.h3 = self.heuristic3()
-        return self.isSolvable()
+        return self.isSolvable(self.board,(self.size**2))
 
     def setBoard(self):
         self.h1 = self.heuristic1()
@@ -80,7 +81,6 @@ class Puzzle:
         str+="---------------"
         return str
 
-
     def solved(self):
         """
         If board is in increasing order,
@@ -89,20 +89,26 @@ class Puzzle:
         """
         return (self.board == self.puzzleEndState())
 
-    def isSolvable(self):
+    def calDP(self,puz, size):
+        dp = 0
+        for i in range(0, size):
+            for j in range(i + 1, size):
+                if puz[j] != 0 and puz[i] != 0 and puz[i] > puz[j]:
+                    dp += 1
+        return dp
+ 
+    def isSolvable(self,puzzle,size) :
         """
         Determines the disorder parameter
         Determines if the puzzle is solvable (DP even)
 
         even = true
         """
-        disorder = 0
-
-        for i in range(self.size-1):
-            for j in range(1+i, self.size-1):
-                if (self.board[j][i] > 0) and (self.board[j][i] > self.board[i][j]):
-                    disorder += 1
-        return (disorder % 2 == 0)
+        # Count inversions in given 8 puzzle
+        dp = self.calDP([j for sub in puzzle for j in sub],size)
+    
+        # return true if dp is even.
+        return (dp % 2 == 0)
 
     def heuristic1(self):
         """
@@ -147,12 +153,13 @@ class Puzzle:
 
     def deepcopy(self):
 
-        temp = Puzzle(((self.size) ** 2)-1)
+        temp = Puzzle(((self.size) ** 2)-1,False)
+        temp.new=True
 
         for i in range(self.size):
             for j in range(self.size):
                 temp.board[i][j] = self.board[i][j]
-
+        temp.setBoard()
         return temp
 
     def isEqual(self, puzzle):

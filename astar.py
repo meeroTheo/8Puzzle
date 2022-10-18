@@ -3,13 +3,13 @@ from queue import PriorityQueue
 from puzzle import Puzzle
 import time
 from collections import deque
+import hashlib
 
 
 class Astar:
 
     def __init__(self, puzzle, g):
         self.puzzle = puzzle
-        self.explored = False
         self.parent = None
         self.g = g
         self.f1 = self.puzzle.h1 + self.g
@@ -161,8 +161,7 @@ class Astar:
         nodecount= 0
         g = 0
         pqueue.append((self.f3, self))
-        seen.add(str(self.puzzle))
-        count = 0
+        seen.add(hash(str(self.puzzle.board)))
         while True:
             # evaluates node in priority queue with smallest f case
             node = pqueue.pop()[1]
@@ -178,21 +177,18 @@ class Astar:
                         child.parent = node
                         node = child
                         break
-                    if (str(new_puzzle) not in seen):
+                    puz=hash(str(new_puzzle.board))
+                    if (puz not in seen): #fix, NEVER NOT IN SEEN
                         nodecount+=1
-                        seen.add(str(new_puzzle))
+                        seen.add(puz)
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         child.set_f3
                         pqueue.append((child.f3, child))  # add to queue
-                        # sort queue
-                        pqueue.sort(key=lambda x: x[0], reverse=True)
+
+            # sort queue
+            pqueue.sort(key=lambda x: x[0], reverse=True)
             # print(node.puzzle)
-            #print(node.g)
-            count += 1
-            # if (count == 100):
-            #    break
-            
             if (node.puzzle.h3 == 0):
                 route = []
                 #print("\n")
