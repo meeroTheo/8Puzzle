@@ -9,10 +9,10 @@ class Astar:
         self.puzzle = puzzle
         self.parent = None
         self.g = g
+        self.f= 0
         self.f1 = self.puzzle.h1 + self.g
         self.f2 = self.puzzle.h2 + self.g
         self.f3 = self.puzzle.h3 + self.g
-        self.children = []
 
     def set_f(self):
         """
@@ -26,13 +26,16 @@ class Astar:
 
     def set_f2(self):
         self.f2 = self.puzzle.h2 + self.g
+        self.f=self.f2
         return
     def set_f1(self):
         self.f1 = self.puzzle.h1 + self.g
+        self.f=self.f1
         return
 
     def set_f3(self):
         self.f3 = self.puzzle.h3 + self.g
+        self.f=self.f3
         return
 
     def findzero(self, puzzle):
@@ -46,6 +49,7 @@ class Astar:
         seen = set()
         nodecount= 0
         g = 0
+        self.f= self.puzzle.h1 + self.g
         heapq.heappush(pqueue,self)
         seen.add(hash(str(self.puzzle.board)))
         while True:
@@ -69,7 +73,7 @@ class Astar:
                         seen.add(puz)
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
-                        child.set_f1
+                        child.set_f1()
                         heapq.heappush(pqueue,child)  # add to queue
 
             # sort queue
@@ -95,6 +99,7 @@ class Astar:
         seen = set()
         nodecount= 0
         g = 0
+        self.f=self.puzzle.h2 + self.g
         heapq.heappush(pqueue,self)
         seen.add(hash(str(self.puzzle.board)))
         while True:
@@ -118,7 +123,7 @@ class Astar:
                         seen.add(puz)
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
-                        child.set_f2
+                        child.set_f2()
                         heapq.heappush(pqueue,child)  # add to queue
 
             # sort queue
@@ -144,6 +149,7 @@ class Astar:
         seen = set()
         nodecount= 0
         g = 0
+        self.f=self.puzzle.h3 + self.g
         heapq.heappush(pqueue,self)
         seen.add(hash(str(self.puzzle.board)))
         while True:
@@ -167,7 +173,7 @@ class Astar:
                         seen.add(puz)
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
-                        child.set_f3
+                        child.set_f3()
                         heapq.heappush(pqueue,child)  # add to queue
 
             # sort queue
@@ -189,4 +195,4 @@ class Astar:
         return steps, nodecount
 
     def __lt__(self, other):
-        return self.f3 < other.f3
+        return self.f < other.f
