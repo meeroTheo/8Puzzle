@@ -3,6 +3,8 @@
 CP468 Assignment 1
 
 ## Instructions
+To run the program, clone the repository or download all files and run main.py in your IDLE of choice.  
+Run main.py and chose the puzzle you wish to run.  
 
 
 ### Heuristics
