@@ -46,11 +46,11 @@ class Astar:
         seen = set()
         nodecount= 0
         g = 0
-        pqueue.append((self.f1, self))
+        heapq.heappush(pqueue,self)
         seen.add(hash(str(self.puzzle.board)))
         while True:
             # evaluates node in priority queue with smallest f case
-            node = pqueue.pop()[1]
+            node = heapq.heappop(pqueue)
             g = node.g + 1
             x, y = self.findzero(node.puzzle)
             coords = [[x, y-1], [x, y+1], [x-1, y], [x+1, y]]
@@ -70,10 +70,9 @@ class Astar:
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         child.set_f1
-                        pqueue.append((child.f1, child))  # add to queue
+                        heapq.heappush(pqueue,child)  # add to queue
 
             # sort queue
-            pqueue.sort(key=lambda x: x[0], reverse=True)
             if (node.puzzle.h1 == 0):
                 route = []
                 #print("\n")
@@ -96,11 +95,11 @@ class Astar:
         seen = set()
         nodecount= 0
         g = 0
-        pqueue.append((self.f2, self))
+        heapq.heappush(pqueue,self)
         seen.add(hash(str(self.puzzle.board)))
         while True:
             # evaluates node in priority queue with smallest f case
-            node = pqueue.pop()[1]
+            node = heapq.heappop(pqueue)
             g = node.g + 1
             x, y = self.findzero(node.puzzle)
             coords = [[x, y-1], [x, y+1], [x-1, y], [x+1, y]]
@@ -120,10 +119,9 @@ class Astar:
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         child.set_f2
-                        pqueue.append((child.f2, child))  # add to queue
+                        heapq.heappush(pqueue,child)  # add to queue
 
             # sort queue
-            pqueue.sort(key=lambda x: x[0], reverse=True)
             if (node.puzzle.h2 == 0):
                 route = []
                 #print("\n")

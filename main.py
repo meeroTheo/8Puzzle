@@ -17,35 +17,28 @@ def main():
 
     result_steps3=[]
     result_nodecount3=[]
-
+    #Test h3
+    """
     puzzle = Puzzle(puzzleSize, True)
     a = Astar(puzzle, 0)
     print(puzzle)
     steps, nc = a.solve3()
     result_steps3.append(steps-1)
-    result_nodecount3.append(nc)
+    result_nodecount3.append(nc)"""
 
-    """result_steps2=[]
+    #test h1,h2,h3
+    result_steps2=[]
     result_nodecount2=[]
     result_steps1=[]
     result_nodecount1=[]
     for x in range(25):
-        print("{}%".format(int(x/25)*100))
-        timeOut=False
-        puzzle = Puzzle(puzzleSize)
-        a = Astar(puzzle, 0)
-        steps, nc, timeOut = a.solve1()
-        if (not timeOut):
-            result_steps1.append(steps-1)
-            result_nodecount1.append(nc)
-            print("done h1")
-        else:
-            print("timeout")
-            x-=1
-            continue
-        print("---------------------")
+        print("Progress: {}%".format(int((x/25)*100)))
+        puzzle = Puzzle(puzzleSize, True)
         print(puzzle)
-        print("---------------------")
+        a = Astar(puzzle, 0)
+        steps, nc= a.solve1()
+        result_steps1.append(steps-1)
+        result_nodecount1.append(nc)
         steps, nc= a.solve2()
         result_steps2.append(steps-1)
         result_nodecount2.append(nc)
@@ -53,10 +46,13 @@ def main():
         result_steps3.append(steps-1)
         result_nodecount3.append(nc)
     
+    print("h1: steps, nodes")
     print(result_steps1)
     print(result_nodecount1)
+    print("h2: steps, nodes")
     print(result_steps2)
-    print(result_nodecount2)"""
+    print(result_nodecount2)
+    print("h3: steps, nodes")
     print(result_steps3)
     print(result_nodecount3)
 

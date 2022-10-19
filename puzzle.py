@@ -63,8 +63,11 @@ class Puzzle:
                         self.f = puz.h1+g
                         heapq.heappush(puzzles,[puz,g])
             if (self.revH1() < num):
+                x=0
+                while (x < random.randint(0,5)):
+                    self.board = heapq.heappop(puzzles)[0].board
                 break
-
+            
         return Puzzle.isSolvable15(self.board)
 
     def findZero(self):
