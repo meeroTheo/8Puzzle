@@ -1,9 +1,6 @@
 
-from queue import PriorityQueue
 from puzzle import Puzzle
-import time
-from collections import deque
-import hashlib
+import heapq
 
 
 class Astar:
@@ -149,11 +146,11 @@ class Astar:
         seen = set()
         nodecount= 0
         g = 0
-        pqueue.append((self.f3, self))
+        heapq.heappush(pqueue,self)
         seen.add(hash(str(self.puzzle.board)))
         while True:
             # evaluates node in priority queue with smallest f case
-            node = pqueue.pop()[1]
+            node = heapq.heappop(pqueue)
             g = node.g + 1
             x, y = self.findzero(node.puzzle)
             coords = [[x, y-1], [x, y+1], [x-1, y], [x+1, y]]
@@ -173,10 +170,9 @@ class Astar:
                         child = Astar(new_puzzle, g)  # create child
                         child.parent = node
                         child.set_f3
-                        pqueue.append((child.f3, child))  # add to queue
+                        heapq.heappush(pqueue,child)  # add to queue
 
             # sort queue
-            pqueue.sort(key=lambda x: x[0], reverse=True)
             if (node.puzzle.h3 == 0):
                 route = []
                 #print("\n")
@@ -193,3 +189,6 @@ class Astar:
                     #print(state.puzzle)
                 break
         return steps, nodecount
+
+    def __lt__(self, other):
+        return self.f3 < other.f3

@@ -1,6 +1,6 @@
 import random
 from math import sqrt
-
+import heapq
 
 class Puzzle:
 
@@ -10,6 +10,7 @@ class Puzzle:
         self.size = int((size+1) ** (1/2))
         self.board = [[0 for x in range(self.size)]
                       for y in range(self.size)]  # matrix
+        self.f1=0
         self.new=new
         if (new):
             solvable = self.createP()
@@ -22,19 +23,55 @@ class Puzzle:
     def createP(self):
         list = random.sample(range(self.size**2), self.size**2)
 
+        if (self.size==4):
+            return self.createP15(list)
         index = 0
         for i in range(self.size):
             for j in range(self.size):
                 self.board[i][j] = list[index]
                 index += 1
-                
-        self.h1 = self.heuristic1()
-        self.h2 = self.heuristic2()
-        self.h3 = self.heuristic3()
-        if (self.size==3):
-            return self.isSolvable(self.board,(self.size**2))
-        else:
-            return Puzzle.isSolvable15(self.board)
+        return self.isSolvable(self.board,(self.size**2))
+
+    def createP15(self, list):
+
+        self.board = [[1, 2, 3, 4], [5, 0, 7, 8],
+                              [9, 6, 10, 11], [13, 14, 15, 12]]
+                              
+        self.h1 = self.revH1()
+        self.f1=self.h1+0
+        g=0
+        nodes=0
+        puzzles=[]
+        seen=set()
+        num = random.randint(12,14)
+        heapq.heappush(puzzles,[self,g])
+        seen.add(hash(str(self.board)))
+        while (True):
+            node = heapq.heappop(puzzles)
+            g=node[1]+1
+            self.board=node[0].board
+            x, y = self.findZero()
+            coords = [[x, y-1], [x, y+1], [x-1, y], [x+1, y]]
+            for i in coords:
+                puz = Puzzle.moves(self, x, y, i[0], i[1])
+                if puz:
+                    puz.h1=puz.revH1()
+                    puzHash=hash(str(puz.board))
+                    if (puzHash not in seen):
+                        nodes+=1
+                        seen.add(puzHash)
+                        self.f = puz.h1+g
+                        heapq.heappush(puzzles,[puz,g])
+            if (self.revH1() < num):
+                break
+
+        return Puzzle.isSolvable15(self.board)
+
+    def findZero(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                if (self.board[i][j] == 0):
+                    return i, j
 
     def setBoard(self):
         self.h1 = self.heuristic1()
@@ -141,6 +178,21 @@ class Puzzle:
         # return true if dp is even.
         return (dp % 2 == 0)
 
+    def revH1(self):
+        """
+        misplaced tiles reverse
+        """
+        count = 0
+        board = self.board
+        #Hardest 15 puzzle goalstate
+        goalstate = [[15, 14, 8, 12], [10, 11, 9, 13],
+                              [2, 6, 5, 1], [3, 7, 4, 0]]
+        for i in range(self.size):
+            for j in range(self.size):
+                if ((board[i][j] != goalstate[i][j]) and board[i][j] != 0):
+                    count += 1
+        return count
+
     def heuristic1(self):
         """
         misplaced tiles
@@ -220,3 +272,6 @@ class Puzzle:
 
         tempState.board[x1][y1] = tempVal
         return tempState
+
+    def __lt__(self, other):
+        return self.f1 < other.f1
