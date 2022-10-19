@@ -183,7 +183,7 @@ class Puzzle:
 
     def revH1(self):
         """
-        misplaced tiles reverse
+        misplaced tiles reverse for createP15
         """
         count = 0
         board = self.board
@@ -247,17 +247,6 @@ class Puzzle:
                 temp.board[i][j] = self.board[i][j]
         temp.setBoard()
         return temp
-
-    def isEqual(self, puzzle):
-        equal = True
-        if (self.size == puzzle.size):
-            for i in range(self.size):
-                for j in range(self.size):
-                    if self.board[i][j] != puzzle.board[i][j]:
-                        equal = False
-        else:
-            equal = False
-        return equal
 
     def moves(self, x1, y1, x2, y2):
         """

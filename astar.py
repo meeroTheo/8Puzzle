@@ -14,16 +14,6 @@ class Astar:
         self.f2 = self.puzzle.h2 + self.g
         self.f3 = self.puzzle.h3 + self.g
 
-    def set_f(self):
-        """
-        return estimated total cost
-        of cheapest solution for h1
-        """
-        self.f1 = self.puzzle.h1 + self.g
-        self.f2 = self.puzzle.h2 + self.g
-        self.f3 = self.puzzle.h3 + self.g
-        return
-
     def set_f2(self):
         self.f2 = self.puzzle.h2 + self.g
         self.f=self.f2
